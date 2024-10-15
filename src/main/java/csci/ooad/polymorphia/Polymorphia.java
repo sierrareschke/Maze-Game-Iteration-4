@@ -10,6 +10,17 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 
+/*
+*  TODO:    Register observer before you start the game
+*  TODO:    Connect observer up to the Event Bus, inside of this class?
+*  TODO:    Implement the IMazeSubject on this object and attach the viewer
+*  TODO:    Call the notifyObservers() method when relevant information is posted to the Event Bus.
+*           At a minimum, you should call this method at the end of each turn (this is also probably sufficient)
+*   TODO:   Implement the getMaze() method, which returns an object that implements the IMaze interface
+
+ * */
+
+
 public class Polymorphia {
     private static final Logger logger = LoggerFactory.getLogger(Polymorphia.class);
 
