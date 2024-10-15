@@ -17,6 +17,8 @@ dependencies {
 
     implementation files('libs/csci4448.gameLayout-1.7.0.jar')
     implementation 'ch.qos.logback:logback-classic:1.4.14'
+
+    implementation files('libs/csci4448.gameLayout-1.8.0.jar')
 }
 
 test {

@@ -12,10 +12,16 @@ import java.util.List;
 
 public class MazeAdaptor implements IMaze {
 
+    private Maze maze;  // Reference to the Maze object
+
+    public MazeAdaptor(Maze maze) {
+        this.maze = maze;
+    }
+
     List<String> getRooms(){};
 
     List<String> getNeighborsOf(){};
 
-    List<String> getContents(String room);
+    List<String> getContents(String room){};
 
 }
