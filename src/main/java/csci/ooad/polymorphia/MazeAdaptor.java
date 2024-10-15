@@ -8,6 +8,8 @@ package csci.ooad.polymorphia;
 *   The getContents() method returns a list of strings. Each one of those strings is printed on a different line in the display.
 * */
 
+import java.util.List;
+
 public class MazeAdaptor implements IMaze {
 
     List<String> getRooms(){};
