@@ -14,6 +14,9 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation files('libs/csci4448.gameLayout-1.7.0.jar')
+    implementation 'ch.qos.logback:logback-classic:1.4.14'
 }
 
 test {
