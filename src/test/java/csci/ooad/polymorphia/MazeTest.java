@@ -89,4 +89,24 @@ class MazeTest {
         assertNotNull(mazeDescription);
         assertFalse(mazeDescription.isEmpty());
     }
+
+    @Test
+    void testGetRoom() {
+        Room room = new Room("Room");
+
+        // Manually set up the rooms in the maze for this test
+        maze = Maze.newBuilder()
+                .addRoom(room)
+                .build();
+
+        // Testing if correct room is returned based on the name
+        Room foundRoom = maze.getRoom("Room");
+        assertNotNull(foundRoom, "Room should not be null when found.");
+        assertEquals("Room", foundRoom.getName(), "Room name should match 'Room'.");
+
+        // Test for room that does not exist
+        Room notFoundRoom = maze.getRoom("NonExistentRoom");
+        assertNull(notFoundRoom, "Room should be null when no matching room is found.");
+    }
+
 }

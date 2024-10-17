@@ -390,4 +390,16 @@ public class Maze  {
     public List<Room> getRooms() {
         return rooms;
     }
+
+    public Room getRoom(String roomName){
+        Room targetRoom = null;
+        for (Room room : rooms) {
+            System.out.println(room.getName());
+            if (room.getName().equals(roomName)) {
+                targetRoom = room;
+                break;
+            }
+        }
+        return targetRoom;
+    }
 }

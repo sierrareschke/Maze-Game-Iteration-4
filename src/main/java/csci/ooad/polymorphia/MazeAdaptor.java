@@ -8,6 +8,7 @@ package csci.ooad.polymorphia;
 *   The getContents() method returns a list of strings. Each one of those strings is printed on a different line in the display.
 * */
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MazeAdaptor implements IMaze {
@@ -18,10 +19,39 @@ public class MazeAdaptor implements IMaze {
         this.maze = maze;
     }
 
-    List<String> getRooms(){};
+    List<String> getRooms(){
+        List<Room> mazeRooms = maze.getRooms();
+        List<String> returnList = new ArrayList<>();
+        for (Room room : mazeRooms) {
+            returnList.add(room.getName());
+        }
+        return returnList;
+    };
 
-    List<String> getNeighborsOf(){};
+    public List<String> getNeighborsOf(String roomName) {
+        List<String> neighborNames = new ArrayList<>();
+        Room room = maze.getRoom(roomName);
 
-    List<String> getContents(String room){};
+        // If no room matches the given roomName, throw an exception
+        if (room == null) {
+            throw new IllegalArgumentException("Room with name " + roomName + " not found in the maze.");
+        }
+
+        // Get the neighbors of the found room
+        List<Room> neighbors = room.getNeighbors();
+
+        // Convert the neighbors to a list of room names
+        for (Room neighbor : neighbors) {
+            neighborNames.add(neighbor.getName());
+        }
+
+        return neighborNames;
+    }
+
+
+    List<String> getContents(String room){
+        Room mazeRoom = maze.getRoom(room);
+        return mazeRoom.getContents();
+    };
 
 }
