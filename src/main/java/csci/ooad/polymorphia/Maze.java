@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 
-
-public class Maze  {
+// TODO implements IMazeSubject ?
+public class Maze implements IMazeSubject {
     private final Random rand = new Random();
     private static final Logger logger = LoggerFactory.getLogger(Maze.class);
 

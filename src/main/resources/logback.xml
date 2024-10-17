@@ -33,7 +33,7 @@
         <appender-ref ref="CONSOLE" />
     </root>
 
-    <root name="csci.ooad.polymorphia.MazeTest" level="INFO">
+    <root name="csci.ooad.polymorphia.maze.MazeTest" level="INFO">
         <appender-ref ref="Game_Status_Cyan" />
     </root>
 

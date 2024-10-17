@@ -1,5 +1,8 @@
-package csci.ooad.polymorphia;
+package csci.ooad.polymorphia.maze;
 
+import csci.ooad.polymorphia.Food;
+import csci.ooad.polymorphia.Maze;
+import csci.ooad.polymorphia.Room;
 import csci.ooad.polymorphia.characters.Adventurer;
 import csci.ooad.polymorphia.characters.Creature;
 import csci.ooad.polymorphia.characters.Character;

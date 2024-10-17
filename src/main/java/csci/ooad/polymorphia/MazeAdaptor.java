@@ -11,7 +11,8 @@ package csci.ooad.polymorphia;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MazeAdaptor implements IMaze {
+// TODO "implements IMaze" (how to access file if in .jar file)
+public class MazeAdaptor {
 
     private Maze maze;  // Reference to the Maze object
 
@@ -19,7 +20,7 @@ public class MazeAdaptor implements IMaze {
         this.maze = maze;
     }
 
-    List<String> getRooms(){
+    public List<String> getRooms(){
         List<Room> mazeRooms = maze.getRooms();
         List<String> returnList = new ArrayList<>();
         for (Room room : mazeRooms) {
@@ -49,7 +50,7 @@ public class MazeAdaptor implements IMaze {
     }
 
 
-    List<String> getContents(String room){
+    public List<String> getContents(String room){
         Room mazeRoom = maze.getRoom(room);
         return mazeRoom.getContents();
     };
