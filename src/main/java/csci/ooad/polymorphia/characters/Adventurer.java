@@ -2,6 +2,8 @@ package csci.ooad.polymorphia.characters;
 
 import csci.ooad.polymorphia.Food;
 import csci.ooad.polymorphia.Room;
+import csci.ooad.polymorphia.events.EventBus;
+import csci.ooad.polymorphia.events.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +48,9 @@ public class Adventurer extends Character {
     public void eatFood() {
         Food foodItem = getCurrentLocation().eatFoodItem();
         log.info(getName() + " just ate " + foodItem);
+        EventBus.getInstance().postMessage(EventType.AteSomething, this.name + " just ate " + foodItem);
         this.gainHealth(foodItem.getHealthValue());
+
     }
 
     Boolean shouldFight() {
