@@ -1,3 +1,5 @@
+package csci.ooad.polymorphia;
+
 //package csci.ooad.polymorphia;
 //
 //// TODO : implement IMaze Methods
@@ -42,6 +44,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import csci.ooad.polymorphia.Maze;
+import csci.ooad.polymorphia.Room;
+
 
 public class MazeAdaptor implements IMaze {
 
