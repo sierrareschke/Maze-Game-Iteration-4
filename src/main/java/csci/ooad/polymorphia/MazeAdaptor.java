@@ -8,11 +8,15 @@ package csci.ooad.polymorphia;
 *   The getContents() method returns a list of strings. Each one of those strings is printed on a different line in the display.
 * */
 
+import csci.ooad.layout.intf.IMaze;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 // TODO "implements IMaze" (how to access file if in .jar file)
-public class MazeAdaptor {
+public class MazeAdaptor implements IMaze {
 
     private Maze maze;  // Reference to the Maze object
 
@@ -20,17 +24,17 @@ public class MazeAdaptor {
         this.maze = maze;
     }
 
-    public List<String> getRooms(){
+    public Set<String> getRooms(){
         List<Room> mazeRooms = maze.getRooms();
-        List<String> returnList = new ArrayList<>();
+        Set<String> roomNames = new HashSet<>();
         for (Room room : mazeRooms) {
-            returnList.add(room.getName());
+            roomNames.add(room.getName());
         }
-        return returnList;
+        return roomNames;
     };
 
-    public List<String> getNeighborsOf(String roomName) {
-        List<String> neighborNames = new ArrayList<>();
+    public Set<String> getNeighborsOf(String roomName) {
+        Set<String> neighborNames = new HashSet<>();
         Room room = maze.getRoom(roomName);
 
         // If no room matches the given roomName, throw an exception
