@@ -35,6 +35,8 @@
 * */
 
 import csci.ooad.layout.intf.IMaze;
+import csci.ooad.polymorphia.Maze;
+import csci.ooad.polymorphia.Room;
 
 import java.util.ArrayList;
 import java.util.HashSet;
