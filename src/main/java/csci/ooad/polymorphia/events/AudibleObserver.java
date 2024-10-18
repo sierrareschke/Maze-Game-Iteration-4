@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class AudibleObserver implements IObserver {
 
-    public AudibleObserver(IObservable observableGame, List<EventType> interestingEvents, int delayInSeconds) {}
+//    public AudibleObserver(IObservable observableGame, List<EventType> interestingEvents, int delayInSeconds) {}
 
     @Override
     public void update(String eventDescription) {
