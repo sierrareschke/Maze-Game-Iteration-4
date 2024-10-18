@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,7 +35,7 @@ class MazeAdaptorTest {
 
     @Test
     void testGetRooms() {
-        List<String> rooms = mazeAdaptor.getRooms();
+        Set<String> rooms = mazeAdaptor.getRooms();
         assertNotNull(rooms);
         assertEquals(4, rooms.size());  // For a 2x2 grid, there should be 4 rooms
     }
@@ -42,7 +43,7 @@ class MazeAdaptorTest {
     @Test
     void testGetNeighborsOfRoom() {
         String roomName = maze.getRooms().get(0).getName();
-        List<String> neighbors = mazeAdaptor.getNeighborsOf(roomName);
+        Set<String> neighbors = mazeAdaptor.getNeighborsOf(roomName);
 
         assertNotNull(neighbors);
         assertFalse(neighbors.isEmpty());
