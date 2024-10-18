@@ -5,7 +5,17 @@ import java.util.List;
 
 public class AudibleObserver implements IObserver {
 
-    public AudibleObserver(IObservable observableGame, List<EventType> interestingEvents, int delayInSeconds) {}
+    private IObservable observableGame;
+    private List<EventType> interestingEvents;
+    private int delayInSeconds;
 
-    public void update(String eventDescription){};
+    public AudibleObserver(IObservable observableGame, List<EventType> interestingEvents, int delayInSeconds) {
+        this.observableGame = observableGame;
+        this.interestingEvents = interestingEvents;
+        this.delayInSeconds = delayInSeconds;
+    }
+
+    public void update(String eventDescription){
+
+    };
 }
