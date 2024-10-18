@@ -2,20 +2,24 @@ package csci.ooad.polymorphia.events;
 
 
 import java.util.List;
+import java.io.IOException;
 
 public class AudibleObserver implements IObserver {
 
-    private IObservable observableGame;
-    private List<EventType> interestingEvents;
     private int delayInSeconds;
 
-    public AudibleObserver(IObservable observableGame, List<EventType> interestingEvents, int delayInSeconds) {
-        this.observableGame = observableGame;
-        this.interestingEvents = interestingEvents;
+    public AudibleObserver(int delayInSeconds) {
         this.delayInSeconds = delayInSeconds;
     }
 
-    public void update(String eventDescription){
-
-    };
+    @Override
+    public void update(String eventDescription) {
+        String[] cmd = {"say", eventDescription};
+        try {
+            Thread.sleep(delayInSeconds);
+            Runtime.getRuntime().exec(cmd);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

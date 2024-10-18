@@ -2,12 +2,17 @@ package csci.ooad.polymorphia;
 
 import csci.ooad.polymorphia.characters.Character;
 import csci.ooad.polymorphia.characters.Creature;
+import csci.ooad.polymorphia.events.*;
+import jdk.jfr.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import static csci.ooad.polymorphia.events.EventType.*;
 
 
 /*
@@ -23,12 +28,20 @@ import java.util.stream.Collectors;
 
 public class Polymorphia {
     private static final Logger logger = LoggerFactory.getLogger(Polymorphia.class);
+    IObserver audibleObserver;
+    EventBus eventBus;
 
     Maze maze;
     Integer turnCount = 0;
     final Random rand = new Random();
 
     public Polymorphia(Maze maze) {
+
+        eventBus = EventBus.getInstance();
+        int delayInSeconds = 100;
+        audibleObserver = new AudibleObserver(delayInSeconds);
+        eventBus.attach(audibleObserver, EventType.All);
+
         this.maze = maze;
     }
 

@@ -1,47 +1,42 @@
 package csci.ooad.polymorphia.events;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Observer;
+import java.util.*;
 
 public class EventBus {
+    private static EventBus instance;
+    private final Map<EventType, Set<IObserver>> eventsAndObservers = new HashMap<>();
 
-    // Need to be able to map event type to those that are observing it
-    private Map<EventType, List<Observer>> eventObservers ;
+    private EventBus() {}
 
-    /*
-    *  This function registers an observer’s interest in a particular event
-    * */
-    // TODO : Change to a list
-    public void attach(Observer observer, EventType eventType) {
+    public static EventBus getInstance() {
+        if (instance == null) {
+            instance = new EventBus();
+        }
+        return instance;
+    }
 
-        if (!eventObservers.containsKey(eventType)) {
-            eventObservers.put(eventType, new ArrayList<>());
+    public void attach(IObserver observer, EventType eventType) {
+        if(!eventsAndObservers.containsKey(eventType)) {
+            eventsAndObservers.put(eventType, new HashSet<IObserver>() {
+            });
         }
 
-        List<Observer> observers = eventObservers.get(eventType);
-
-        if (!observers.contains(observer)) {
-            observers.add(observer);
+        if(!eventsAndObservers.get(eventType).contains(observer)) {
+            eventsAndObservers.get(eventType).add(observer);
         }
     }
 
+    public void postMessage(EventType eventType,String eventDescription) {
+        Set<IObserver> subscribersToEvent = eventsAndObservers.get(eventType);
+        Set<IObserver> subscribersToAllEvents = eventsAndObservers.get(EventType.All);
 
-    /*
-     *  This function is called by game elements when an event occurs
-     */
-    public void postMessage(EventType eventType, String eventDescription) {
-        // Get the list of observers subscribed to the event type
-        List<Observer> toBeNotifiedObservers = eventObservers.get(eventType);
+        if (subscribersToAllEvents != null) {
+            // Use addAll to merge subscribers, ensuring no duplicates
+            subscribersToEvent.addAll(subscribersToAllEvents);
+        }
 
-        // Check if there are any observers to notify
-        if (toBeNotifiedObservers != null) {
-            // Notify each observer
-            for (Observer observer : toBeNotifiedObservers) {
-                observer.update(eventType, eventDescription);
-            }
+        for(IObserver observer : subscribersToEvent) {
+            observer.update(eventDescription);
         }
     }
-
 }
