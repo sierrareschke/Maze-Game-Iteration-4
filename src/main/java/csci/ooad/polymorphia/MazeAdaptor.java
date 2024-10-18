@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-// TODO "implements IMaze" (how to access file if in .jar file)
 public class MazeAdaptor implements IMaze {
 
     private Maze maze;  // Reference to the Maze object

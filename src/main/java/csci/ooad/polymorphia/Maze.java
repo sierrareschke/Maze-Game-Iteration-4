@@ -1,5 +1,8 @@
 package csci.ooad.polymorphia;
 
+import csci.ooad.layout.intf.IMaze;
+import csci.ooad.layout.intf.IMazeObserver;
+import csci.ooad.layout.intf.IMazeSubject;
 import csci.ooad.polymorphia.characters.Adventurer;
 import csci.ooad.polymorphia.characters.Character;
 import csci.ooad.polymorphia.characters.Creature;
@@ -28,6 +31,27 @@ public class Maze implements IMazeSubject {
 
     public static MazeBuilder newBuilder() {
         return new MazeBuilder();
+    }
+
+    // TODO - implement interface methods and write tests
+    @Override
+    public void attach(IMazeObserver observer) {
+        IMazeSubject.super.attach(observer);
+    }
+
+    @Override
+    public void notifyObservers(String statusMessage) {
+        IMazeSubject.super.notifyObservers(statusMessage);
+    }
+
+    @Override
+    public void notifyObservers(List<String> statusMessages) {
+        IMazeSubject.super.notifyObservers(statusMessages);
+    }
+
+    @Override
+    public IMaze getMaze() {
+        return null;
     }
 
 
