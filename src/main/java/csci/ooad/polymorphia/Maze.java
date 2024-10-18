@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 
-public class Maze implements IMazeSubject {
+public class Maze {
     private final Random rand = new Random();
     private static final Logger logger = LoggerFactory.getLogger(Maze.class);
 
@@ -32,26 +32,7 @@ public class Maze implements IMazeSubject {
         return new MazeBuilder();
     }
 
-    // TODO - implement interface methods and write tests
-    @Override
-    public void attach(IMazeObserver observer) {
-        IMazeSubject.super.attach(observer);
-    }
-
-    @Override
-    public void notifyObservers(String statusMessage) {
-        IMazeSubject.super.notifyObservers(statusMessage);
-    }
-
-    @Override
-    public void notifyObservers(List<String> statusMessages) {
-        IMazeSubject.super.notifyObservers(statusMessages);
-    }
-
-    @Override
-    public IMaze getMaze() {
-        return null;
-    }
+    // TODO - implement interface methods and write tests ??
 
 
     public static class MazeBuilder {

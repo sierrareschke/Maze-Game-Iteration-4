@@ -1,5 +1,9 @@
 package csci.ooad.polymorphia;
 
+import csci.ooad.layout.intf.IMaze;
+import csci.ooad.layout.intf.IMazeObserver;
+import csci.ooad.layout.intf.IMazeSubject;
+import csci.ooad.layout.intf.MazeObserver;
 import csci.ooad.polymorphia.characters.Character;
 import csci.ooad.polymorphia.characters.Creature;
 import csci.ooad.polymorphia.events.*;
@@ -16,17 +20,17 @@ import static csci.ooad.polymorphia.events.EventType.*;
 
 
 /*
-*  TODO:    Register observer before you start the game
-*  TODO:    Connect observer up to the Event Bus, inside of this class?
-*  TODO:    Implement the IMazeSubject on this object and attach the viewer
-*  TODO:    Call the notifyObservers() method when relevant information is posted to the Event Bus.
-*           At a minimum, you should call this method at the end of each turn (this is also probably sufficient)
-*   TODO:   Implement the getMaze() method, which returns an object that implements the IMaze interface
+ *  TODO:    Register observer before you start the game
+ *  TODO:    Connect observer up to the Event Bus, inside of this class?
+ *  TODO:    Implement the IMazeSubject on this object and attach the viewer
+ *  TODO:    Call the notifyObservers() method when relevant information is posted to the Event Bus.
+ *           At a minimum, you should call this method at the end of each turn (this is also probably sufficient)
+ *   TODO:   Implement the getMaze() method, which returns an object that implements the IMaze interface
 
  * */
 
 
-public class Polymorphia {
+public class Polymorphia implements IMazeSubject {
     private static final Logger logger = LoggerFactory.getLogger(Polymorphia.class);
     IObserver audibleObserver;
     EventBus eventBus;
@@ -90,6 +94,8 @@ public class Polymorphia {
         while (!isOver()) {
             logger.info(this.toString());
             playTurn();
+            notifyObservers("turn finished, update game staus display");
+            // TODO - EventBus update
         }
         logger.info("The game ended after {} turns.", turnCount);
         String eventDescription;
@@ -125,5 +131,25 @@ public class Polymorphia {
 
     private boolean hasLivingCharacters() {
         return !getLivingCharacters().isEmpty();
+    }
+
+
+    // IMazeSubject interface methods
+    @Override
+    public void attach(IMazeObserver observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void notifyObservers(String statusMessage) {
+        for (IMazeObserver observer : observers) {
+            observer.update(getMaze(), statusMessage);
+        }
+    }
+
+    @Override
+    public IMaze getMaze() {
+        MazeAdaptor mazeAdaptor = new MazeAdaptor(maze);
+        return mazeAdaptor;
     }
 }
