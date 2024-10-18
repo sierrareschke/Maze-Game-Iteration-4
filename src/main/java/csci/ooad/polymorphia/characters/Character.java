@@ -2,6 +2,8 @@ package csci.ooad.polymorphia.characters;
 
 import csci.ooad.polymorphia.Die;
 import csci.ooad.polymorphia.Room;
+import csci.ooad.polymorphia.events.EventBus;
+import csci.ooad.polymorphia.events.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +54,9 @@ public abstract class Character implements Comparable<Character> {
         health -= healthPoints;
 
         if (health <= 0) {
-            logger.info("{} just died!", name);
+            String deathString = name + " just died!";
+            logger.info(deathString);
+            EventBus.getInstance().postMessage(EventType.Death,deathString);
         }
     }
 
@@ -88,10 +92,21 @@ public abstract class Character implements Comparable<Character> {
         logger.info(getName() + " rolled " + adventurerRoll);
         logger.info(opponent + " rolled " + creatureRoll);
 
+        EventBus eventBus = EventBus.getInstance();
+
         if (adventurerRoll > creatureRoll) {
-            opponent.loseFightDamage(adventurerRoll - creatureRoll);
+            int damage = adventurerRoll - creatureRoll;
+            opponent.loseFightDamage(damage);
+            String outcomeString = this.name + " beat " + opponent + ", causing " + damage + " damage";
+            eventBus.postMessage(EventType.FightOutcome,outcomeString);
         } else if (creatureRoll > adventurerRoll) {
-            loseFightDamage(creatureRoll - adventurerRoll);
+            int damage = creatureRoll - adventurerRoll;
+            loseFightDamage(damage);
+            String outcomeString = this.name + " lost to " + opponent + ", causing " + damage + " damage";
+            eventBus.postMessage(EventType.FightOutcome,outcomeString);
+        } else {
+            String outcomeString = this.name + " tied with " + opponent;
+            eventBus.postMessage(EventType.FightOutcome,outcomeString);
         }
 
         loseHealth(Character.HEALTH_LOST_IN_FIGHT_REGARDLESS_OF_OUTCOME);

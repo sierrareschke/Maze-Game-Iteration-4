@@ -5,7 +5,7 @@ import csci.ooad.polymorphia.events.IObserver;
 
 import java.util.*;
 
-public class EventBus {
+public class EventBus implements IObservable {
     private static EventBus instance;
     private final Map<EventType, Set<IObserver>> eventsAndObservers = new HashMap<>();
 
