@@ -84,7 +84,6 @@ public class Polymorphia implements IMazeSubject {
                     .collect(Collectors.toList());
         }
 
-        eventBus.postMessage(EventType.TurnEnded,"Turn " + turnCount + " ended");
     }
 
     public List<Character> getLivingCharacters() {
@@ -97,8 +96,9 @@ public class Polymorphia implements IMazeSubject {
         while (!isOver()) {
             logger.info(this.toString());
             playTurn();
-            notifyObservers("turn finished, update game staus display");
-            // TODO - EventBus update
+            String turnMessage = "Turn " + turnCount + " ended";
+            notifyObservers(turnMessage);
+            eventBus.postMessage(EventType.TurnEnded,turnMessage);
         }
         logger.info("The game ended after {} turns.", turnCount);
         eventBus.postMessage(EventType.GameOver,"Game has ended");
