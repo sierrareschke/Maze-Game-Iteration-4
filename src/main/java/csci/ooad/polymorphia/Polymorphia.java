@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import static csci.ooad.polymorphia.events.EventType.*;
@@ -38,6 +39,7 @@ public class Polymorphia implements IMazeSubject {
     Maze maze;
     Integer turnCount = 0;
     final Random rand = new Random();
+    Future<Void> lastSpeechTask = null;
 
     public Polymorphia(Maze maze) {
 
@@ -90,27 +92,31 @@ public class Polymorphia implements IMazeSubject {
         return maze.getLivingCharacters();
     }
 
-
     public void play() {
         eventBus.postMessage(EventType.GameStart,"Game has begun");
         while (!isOver()) {
             logger.info(this.toString());
+
+            // Wait for the last speech task to finish before starting the next turn
+            if (lastSpeechTask != null) {
+                try {
+                    lastSpeechTask.get();  // Wait until the previous speech task is done
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
             playTurn();
             String turnMessage = "Turn " + turnCount + " ended";
             notifyObservers(turnMessage);
-            eventBus.postMessage(EventType.TurnEnded,turnMessage);
+
+            // Post a new message to the event bus and save the Future object
+            lastSpeechTask = ((AudibleObserver) audibleObserver).update(turnMessage);
+            eventBus.postMessage(EventType.TurnEnded, turnMessage);
         }
+
         logger.info("The game ended after {} turns.", turnCount);
         eventBus.postMessage(EventType.GameOver,"Game has ended");
-        String eventDescription;
-        if (hasLivingAdventurers()) {
-            eventDescription = "The adventurers won! Left standing are:\n" + getAdventurerNames() + "\n";
-        } else if (hasLivingCreatures()) {
-            eventDescription = "The creatures won! Left standing are:\n" + getCreatureNames() + "\n";
-        } else {
-            eventDescription = "No team won! Everyone died!\n";
-        }
-        logger.info(eventDescription);
     }
 
     String getAdventurerNames() {
