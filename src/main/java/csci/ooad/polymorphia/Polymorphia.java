@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import static csci.ooad.polymorphia.events.EventType.*;
@@ -36,8 +37,9 @@ public class Polymorphia implements IMazeSubject {
     EventBus eventBus;
 
     Maze maze;
-    Integer turnCount = 0;
+    Integer turnCount = 1;
     final Random rand = new Random();
+    Future<Void> lastSpeechTask = null;
 
     public Polymorphia(Maze maze) {
 
@@ -68,10 +70,9 @@ public class Polymorphia implements IMazeSubject {
     }
 
     public void playTurn() {
-        if (turnCount == 0) {
+        if (turnCount == 1) {
             logger.info("Starting play...");
         }
-        turnCount += 1;
 
         // Process all the characters in random order
         List<Character> characters = getLivingCharacters();
@@ -83,34 +84,43 @@ public class Polymorphia implements IMazeSubject {
                     .filter(Character::isAlive)
                     .collect(Collectors.toList());
         }
-
     }
 
     public List<Character> getLivingCharacters() {
         return maze.getLivingCharacters();
     }
 
-
     public void play() {
         eventBus.postMessage(EventType.GameStart,"Game has begun");
         while (!isOver()) {
             logger.info(this.toString());
+
+            // Wait for the last speech task to finish before starting the next turn
+            if (lastSpeechTask != null) {
+                try {
+                    lastSpeechTask.get();  // Wait until the previous speech task is done
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            // Notify start of turn
+            String startTurn = "Turn " + turnCount;
+            notifyObservers(startTurn);
+
             playTurn();
             String turnMessage = "Turn " + turnCount + " ended";
             notifyObservers(turnMessage);
-            eventBus.postMessage(EventType.TurnEnded,turnMessage);
+
+            // Post a new message to the event bus and save the Future object
+            lastSpeechTask = audibleObserver.update(turnMessage);
+            eventBus.postMessage(EventType.TurnEnded, turnMessage);
+
+            // increment the round counter
+            turnCount += 1;
         }
+
         logger.info("The game ended after {} turns.", turnCount);
         eventBus.postMessage(EventType.GameOver,"Game has ended");
-        String eventDescription;
-        if (hasLivingAdventurers()) {
-            eventDescription = "The adventurers won! Left standing are:\n" + getAdventurerNames() + "\n";
-        } else if (hasLivingCreatures()) {
-            eventDescription = "The creatures won! Left standing are:\n" + getCreatureNames() + "\n";
-        } else {
-            eventDescription = "No team won! Everyone died!\n";
-        }
-        logger.info(eventDescription);
     }
 
     String getAdventurerNames() {

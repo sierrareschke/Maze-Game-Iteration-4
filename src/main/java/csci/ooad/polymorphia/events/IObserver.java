@@ -1,6 +1,8 @@
 package csci.ooad.polymorphia.events;
 
+import java.util.concurrent.Future;
+
 public interface IObserver {
 
-    void update(String eventDescription);
+    Future<Void> update(String eventDescription);
 }
