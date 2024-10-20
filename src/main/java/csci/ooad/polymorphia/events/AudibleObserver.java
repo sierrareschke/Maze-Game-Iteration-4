@@ -25,9 +25,6 @@ public class AudibleObserver implements IObserver {
             @Override
             public Void call() throws Exception {
                 try {
-                    // Add the delay before speaking
-                    Thread.sleep(0);
-
                     // Synchronized block to ensure only one thread runs the "say" command at a time
                     synchronized (speechLock) {
                         String[] cmd = {"say", eventDescription};

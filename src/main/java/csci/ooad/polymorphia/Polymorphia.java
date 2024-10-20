@@ -37,7 +37,7 @@ public class Polymorphia implements IMazeSubject {
     EventBus eventBus;
 
     Maze maze;
-    Integer turnCount = 0;
+    Integer turnCount = 1;
     final Random rand = new Random();
     Future<Void> lastSpeechTask = null;
 
@@ -70,10 +70,9 @@ public class Polymorphia implements IMazeSubject {
     }
 
     public void playTurn() {
-        if (turnCount == 0) {
+        if (turnCount == 1) {
             logger.info("Starting play...");
         }
-        turnCount += 1;
 
         // Process all the characters in random order
         List<Character> characters = getLivingCharacters();
@@ -85,7 +84,6 @@ public class Polymorphia implements IMazeSubject {
                     .filter(Character::isAlive)
                     .collect(Collectors.toList());
         }
-
     }
 
     public List<Character> getLivingCharacters() {
@@ -105,14 +103,20 @@ public class Polymorphia implements IMazeSubject {
                     e.printStackTrace();
                 }
             }
+            // Notify start of turn
+            String startTurn = "Turn " + turnCount;
+            notifyObservers(startTurn);
 
             playTurn();
             String turnMessage = "Turn " + turnCount + " ended";
             notifyObservers(turnMessage);
 
             // Post a new message to the event bus and save the Future object
-            lastSpeechTask = ((AudibleObserver) audibleObserver).update(turnMessage);
+            lastSpeechTask = audibleObserver.update(turnMessage);
             eventBus.postMessage(EventType.TurnEnded, turnMessage);
+
+            // increment the round counter
+            turnCount += 1;
         }
 
         logger.info("The game ended after {} turns.", turnCount);
