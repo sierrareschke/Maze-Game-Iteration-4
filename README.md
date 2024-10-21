@@ -25,7 +25,7 @@
 The game files can be found in the main directory. They are named `./polymorphia_game_play_1.log`, `./polymorphia_game_play_2.log` and `./polymorphia_game_play_3.log`.
 
 ### Test Coverage
-![](./hw_4_test_coverage.png)
+![](./hw_5_test_coverage.png)
 
 
 You will submit this assignment via a link to your GIT repository. If you are re-using a repository from

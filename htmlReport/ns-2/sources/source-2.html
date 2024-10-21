@@ -1,0 +1,236 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Character</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">csci.ooad.polymorphia.characters</a>
+</div>
+
+<h1>Coverage Summary for Class: Character (csci.ooad.polymorphia.characters)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Character</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (17/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (53/53)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package csci.ooad.polymorphia.characters;
+&nbsp;
+&nbsp;import csci.ooad.polymorphia.Die;
+&nbsp;import csci.ooad.polymorphia.Room;
+&nbsp;import csci.ooad.polymorphia.events.EventBus;
+&nbsp;import csci.ooad.polymorphia.events.EventType;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;
+&nbsp;
+&nbsp;public abstract class Character implements Comparable&lt;Character&gt; {
+<b class="fc">&nbsp;    private static final Logger logger = LoggerFactory.getLogger(Character.class);</b>
+&nbsp;
+<b class="fc">&nbsp;    static final Double DEFAULT_INITIAL_HEALTH = 5.0;</b>
+<b class="fc">&nbsp;    static final Double HEALTH_LOST_IN_FIGHT_REGARDLESS_OF_OUTCOME = 0.5;</b>
+<b class="fc">&nbsp;    static final Double HEALTH_LOST_IN_MOVING_ROOMS = 0.25;</b>
+&nbsp;
+&nbsp;    protected String name;
+&nbsp;    private Double health;
+&nbsp;
+&nbsp;    private Room currentLocation;
+&nbsp;
+&nbsp;    public Room getCurrentLocation() {
+<b class="fc">&nbsp;        return currentLocation;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Character(String name) {
+<b class="fc">&nbsp;        this(name, DEFAULT_INITIAL_HEALTH);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public Character(String name, Double initialHealth) {</b>
+<b class="fc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.health = initialHealth;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int compareTo(Character otherCharacter) {
+<b class="fc">&nbsp;        return getHealth().compareTo(otherCharacter.getHealth());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void enterRoom(Room room) {
+<b class="fc">&nbsp;        this.currentLocation = room;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String toString() {
+<b class="fc">&nbsp;        return getName() + &quot;(health: &quot; + getHealth() + &quot;)&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void loseHealth(Double healthPoints) {
+<b class="fc">&nbsp;        if (health &lt;= 0) {</b>
+&nbsp;            return;     // already dead, probably called for mandatory health loss for having a fight
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        health -= healthPoints;</b>
+&nbsp;
+<b class="fc">&nbsp;        if (health &lt;= 0) {</b>
+<b class="fc">&nbsp;            String deathString = name + &quot; just died!&quot;;</b>
+<b class="fc">&nbsp;            logger.info(deathString);</b>
+<b class="fc">&nbsp;            EventBus.getInstance().postMessage(EventType.Death,deathString);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public Double getHealth() {
+<b class="fc">&nbsp;        return health;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getName() {
+<b class="fc">&nbsp;        return name;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Boolean isAlive() {
+<b class="fc">&nbsp;        return getHealth() &gt; 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void loseFightDamage(double fightDamage) {
+<b class="fc">&nbsp;        loseHealth(fightDamage);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Boolean isAdventurer() {
+<b class="fc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Boolean isCreature() {
+<b class="fc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void fight(Character opponent) {
+<b class="fc">&nbsp;        Integer adventurerRoll = Die.rollSixSided();</b>
+<b class="fc">&nbsp;        Integer creatureRoll = Die.rollSixSided();</b>
+<b class="fc">&nbsp;        logger.info(getName() + &quot; is fighting &quot; + opponent);</b>
+&nbsp;
+<b class="fc">&nbsp;        logger.info(getName() + &quot; rolled &quot; + adventurerRoll);</b>
+<b class="fc">&nbsp;        logger.info(opponent + &quot; rolled &quot; + creatureRoll);</b>
+&nbsp;
+<b class="fc">&nbsp;        EventBus eventBus = EventBus.getInstance();</b>
+&nbsp;
+<b class="fc">&nbsp;        if (adventurerRoll &gt; creatureRoll) {</b>
+<b class="fc">&nbsp;            int damage = adventurerRoll - creatureRoll;</b>
+<b class="fc">&nbsp;            opponent.loseFightDamage(damage);</b>
+<b class="fc">&nbsp;            String outcomeString = this.name + &quot; beat &quot; + opponent + &quot;, causing &quot; + damage + &quot; damage&quot;;</b>
+<b class="fc">&nbsp;            eventBus.postMessage(EventType.FightOutcome,outcomeString);</b>
+<b class="fc">&nbsp;        } else if (creatureRoll &gt; adventurerRoll) {</b>
+<b class="fc">&nbsp;            int damage = creatureRoll - adventurerRoll;</b>
+<b class="fc">&nbsp;            loseFightDamage(damage);</b>
+<b class="fc">&nbsp;            String outcomeString = this.name + &quot; lost to &quot; + opponent + &quot;, causing &quot; + damage + &quot; damage&quot;;</b>
+<b class="fc">&nbsp;            eventBus.postMessage(EventType.FightOutcome,outcomeString);</b>
+<b class="fc">&nbsp;        } else {</b>
+<b class="fc">&nbsp;            String outcomeString = this.name + &quot; tied with &quot; + opponent;</b>
+<b class="fc">&nbsp;            eventBus.postMessage(EventType.FightOutcome,outcomeString);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        loseHealth(Character.HEALTH_LOST_IN_FIGHT_REGARDLESS_OF_OUTCOME);</b>
+<b class="fc">&nbsp;        opponent.loseHealth(Character.HEALTH_LOST_IN_FIGHT_REGARDLESS_OF_OUTCOME);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public abstract void doAction();
+&nbsp;
+&nbsp;    protected void move() {
+<b class="fc">&nbsp;        Room nextLocation = getCurrentLocation().getRandomNeighbor();</b>
+<b class="fc">&nbsp;        if (nextLocation != null) {</b>
+<b class="fc">&nbsp;            logger.info(getName() + &quot; moved from &quot; + getCurrentLocation().getName() + &quot; to &quot; + nextLocation.getName());</b>
+<b class="fc">&nbsp;            nextLocation.enter(this);</b>
+<b class="fc">&nbsp;            loseHealth(HEALTH_LOST_IN_MOVING_ROOMS);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            logger.warn(getCurrentLocation().getName() + &quot; has no neighbors!&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    protected void gainHealth(double healthValue) {
+<b class="fc">&nbsp;        this.health += healthValue;</b>
+<b class="fc">&nbsp;        logger.info(getName() + &quot; gained health: &quot; + healthValue);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-21 11:54</div>
+</div>
+</body>
+</html>

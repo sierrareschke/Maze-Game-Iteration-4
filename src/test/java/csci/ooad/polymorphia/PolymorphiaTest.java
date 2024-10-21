@@ -19,7 +19,7 @@ public class PolymorphiaTest {
             "Cookie", "Banana", "Steak", "Fries", "Burger",
             "Ice Cream", "Coffee", "Coke", "Pizza", "Pasta");
     private IMazeObserver mazeObserver;
-    private final int SECONDS_TO_PAUSE_BETWEEN_TURNS = 10;
+    private final int SECONDS_TO_PAUSE_BETWEEN_TURNS = 3;
 
     @BeforeEach
     void setUp() {

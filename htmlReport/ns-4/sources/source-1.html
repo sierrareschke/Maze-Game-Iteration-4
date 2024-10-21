@@ -1,0 +1,206 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CharacterFactory</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">csci.ooad.polymorphia.factories</a>
+</div>
+
+<h1>Coverage Summary for Class: CharacterFactory (csci.ooad.polymorphia.factories)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CharacterFactory</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (46/46)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package csci.ooad.polymorphia.factories;
+&nbsp;
+&nbsp;// Create concrete classes for Knights, Cowards, Gluttons, regular Adventurers, regular Creatures, and Demons
+&nbsp;
+&nbsp;import csci.ooad.polymorphia.Die;
+&nbsp;import csci.ooad.polymorphia.characters.*;
+&nbsp;import csci.ooad.polymorphia.characters.Character;
+&nbsp;
+&nbsp;import java.lang.reflect.Array;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+<b class="fc">&nbsp;public class CharacterFactory {</b>
+<b class="fc">&nbsp;    private final String[] creatureTypes = {&quot;Ogre&quot;, &quot;Troll&quot;, &quot;Goblin&quot;, &quot;Vampire&quot;, &quot;Ghoul&quot;, &quot;Ghost&quot;, &quot;Satanic Minion&quot;};</b>
+&nbsp;
+&nbsp;    public ArrayList&lt;Character&gt; createAdventurers(int numKnights, int numCowards, int numGluttons, int numRegular) {
+&nbsp;        // Check for null and establish a default
+<b class="fc">&nbsp;        if (numKnights == -1) numKnights = 2;</b>
+<b class="fc">&nbsp;        if (numCowards == -1) numCowards = 2;</b>
+<b class="fc">&nbsp;        if (numGluttons == -1) numGluttons = 2;</b>
+<b class="fc">&nbsp;        if (numRegular == -1) numRegular = 4;</b>
+&nbsp;
+<b class="fc">&nbsp;        ArrayList&lt;Character&gt; knights = createKnights(numKnights);</b>
+<b class="fc">&nbsp;        ArrayList&lt;Character&gt; cowards = createCowards(numCowards);</b>
+<b class="fc">&nbsp;        ArrayList&lt;Character&gt; gluttons = createGluttons(numGluttons);</b>
+<b class="fc">&nbsp;        ArrayList&lt;Character&gt; regular = createAdventurers(numRegular);</b>
+&nbsp;
+<b class="fc">&nbsp;        ArrayList&lt;Character&gt; allCharacters = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        allCharacters.addAll(knights);</b>
+<b class="fc">&nbsp;        allCharacters.addAll(cowards);</b>
+<b class="fc">&nbsp;        allCharacters.addAll(gluttons);</b>
+<b class="fc">&nbsp;        allCharacters.addAll(regular);</b>
+&nbsp;
+<b class="fc">&nbsp;        return allCharacters;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /*
+&nbsp;    * createAdventurers(int numKnights, int numCowards, int numGluttons, int numRegular)
+&nbsp;    *
+&nbsp;    * createAdventurers(int numAdventurers) // return specified num adventurers with rand types
+&nbsp;    *
+&nbsp;    * createCreatures(int numRegular, boolean isDemon) // returns number of regular creatures AND ONE DEMON?? add a check for demon??
+&nbsp;    *
+&nbsp;    * */
+&nbsp;
+&nbsp;    public ArrayList&lt;Character&gt; createKnights(int numberOfKnights){
+&nbsp;        // Check for null and establish a default
+<b class="fc">&nbsp;        if (numberOfKnights == -1) numberOfKnights = 2;</b>
+&nbsp;
+<b class="fc">&nbsp;        ArrayList&lt;Character&gt; knights = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; numberOfKnights; i++) {</b>
+<b class="fc">&nbsp;            String name = &quot;Knight_&quot; + i + 1;</b>
+<b class="fc">&nbsp;            knights.add(new Knight(name));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return knights;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Character&gt; createAdventurers(int numberOfAdventurers){
+<b class="fc">&nbsp;        ArrayList&lt;Character&gt; adventurers = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; numberOfAdventurers; i++) {</b>
+<b class="fc">&nbsp;            String name = &quot;Glutton_&quot; + i + 1;</b>
+<b class="fc">&nbsp;            adventurers.add(new Adventurer(name));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return adventurers;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Character&gt; createGluttons(int numberOfGluttons){
+<b class="fc">&nbsp;        ArrayList&lt;Character&gt; gluttons = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; numberOfGluttons; i++) {</b>
+<b class="fc">&nbsp;            String name = &quot;Glutton_&quot; + i + 1;</b>
+<b class="fc">&nbsp;            gluttons.add(new Glutton(name));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return gluttons;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Character&gt; createCowards(int numberOfCowards){
+<b class="fc">&nbsp;        ArrayList&lt;Character&gt; cowards = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; numberOfCowards; i++) {</b>
+<b class="fc">&nbsp;            String name = &quot;Cowards_&quot; + i + 1;</b>
+<b class="fc">&nbsp;            cowards.add(new Coward(name));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return cowards;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Character createDemon(){
+<b class="fc">&nbsp;        return new Demon(&quot;Demon&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // TODO - make static? AND account for isDemon
+&nbsp;    public ArrayList&lt;Character&gt; createCreatures(int numberOfCreatures, boolean includeDemon){
+<b class="fc">&nbsp;        ArrayList&lt;Character&gt; creatures = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        if (includeDemon){</b>
+<b class="fc">&nbsp;            numberOfCreatures --;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        for (int i = 0; i &lt; numberOfCreatures; i++) {</b>
+<b class="fc">&nbsp;            int diceRoll = Die.rollSixSided();</b>
+<b class="fc">&nbsp;            creatures.add(new Creature(this.creatureTypes[diceRoll]));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (includeDemon) creatures.add(createDemon());</b>
+&nbsp;
+<b class="fc">&nbsp;        return creatures;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-21 11:54</div>
+</div>
+</body>
+</html>

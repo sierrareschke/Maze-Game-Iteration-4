@@ -1,0 +1,200 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MazeAdaptor</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">csci.ooad.polymorphia</a>
+</div>
+
+<h1>Coverage Summary for Class: MazeAdaptor (csci.ooad.polymorphia)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MazeAdaptor</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.2%
+  </span>
+  <span class="absValue">
+    (20/21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package csci.ooad.polymorphia;
+&nbsp;
+&nbsp;//package csci.ooad.polymorphia;
+&nbsp;//
+&nbsp;//// TODO : implement IMaze Methods
+&nbsp;//
+&nbsp;///*
+&nbsp;//*   Make sure you don’t break encapsulation, meaning you should not return a mutable list that is your actual list of rooms.
+&nbsp;//*   Ideally, you’d return an immutable list to the getRooms() method. Rooms are referenced by their name.
+&nbsp;//*   The getContents() method returns a list of strings. Each one of those strings is printed on a different line in the display.
+&nbsp;//* */
+&nbsp;//
+&nbsp;//import java.util.List;
+&nbsp;//
+&nbsp;//public class MazeAdaptor implements IMaze {
+&nbsp;//
+&nbsp;//    private Maze maze;  // Reference to the Maze object
+&nbsp;//
+&nbsp;//    public MazeAdaptor(Maze maze) {
+&nbsp;//        this.maze = maze;
+&nbsp;//    }
+&nbsp;//
+&nbsp;//    List&lt;String&gt; getRooms(){};
+&nbsp;//
+&nbsp;//    List&lt;String&gt; getNeighborsOf(){};
+&nbsp;//
+&nbsp;//    List&lt;String&gt; getContents(String room){};
+&nbsp;//
+&nbsp;//}
+&nbsp;
+&nbsp;// TODO : implement IMaze Methods
+&nbsp;
+&nbsp;/*
+&nbsp;*   Make sure you don’t break encapsulation, meaning you should not return a mutable list that is your actual list of rooms.
+&nbsp;*   Ideally, you’d return an immutable list to the getRooms() method. Rooms are referenced by their name.
+&nbsp;*   The getContents() method returns a list of strings. Each one of those strings is printed on a different line in the display.
+&nbsp;* */
+&nbsp;
+&nbsp;import csci.ooad.layout.intf.IMaze;
+&nbsp;import csci.ooad.polymorphia.Maze;
+&nbsp;import csci.ooad.polymorphia.Room;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;import csci.ooad.polymorphia.Maze;
+&nbsp;import csci.ooad.polymorphia.Room;
+&nbsp;
+&nbsp;
+&nbsp;public class MazeAdaptor implements IMaze {
+&nbsp;
+&nbsp;    private Maze maze;  // Reference to the Maze object
+&nbsp;
+<b class="fc">&nbsp;    public MazeAdaptor(Maze maze) {</b>
+<b class="fc">&nbsp;        this.maze = maze;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Set&lt;String&gt; getRooms(){
+<b class="fc">&nbsp;        List&lt;Room&gt; mazeRooms = maze.getRooms();</b>
+<b class="fc">&nbsp;        Set&lt;String&gt; roomNames = new HashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (Room room : mazeRooms) {</b>
+<b class="fc">&nbsp;            roomNames.add(room.getName());</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return roomNames;</b>
+&nbsp;    };
+&nbsp;
+&nbsp;    public Set&lt;String&gt; getNeighborsOf(String roomName) {
+<b class="fc">&nbsp;        Set&lt;String&gt; neighborNames = new HashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;        Room room = maze.getRoom(roomName);</b>
+&nbsp;
+&nbsp;        // If no room matches the given roomName, throw an exception
+<b class="fc">&nbsp;        if (room == null) {</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Room with name &quot; + roomName + &quot; not found in the maze.&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Get the neighbors of the found room
+<b class="fc">&nbsp;        List&lt;Room&gt; neighbors = room.getNeighbors();</b>
+&nbsp;
+&nbsp;        // Convert the neighbors to a list of room names
+<b class="fc">&nbsp;        for (Room neighbor : neighbors) {</b>
+<b class="fc">&nbsp;            neighborNames.add(neighbor.getName());</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return neighborNames;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public List&lt;String&gt; getContents(String room){
+<b class="fc">&nbsp;        Room mazeRoom = maze.getRoom(room);</b>
+<b class="fc">&nbsp;        if (mazeRoom != null) {</b>
+<b class="fc">&nbsp;            return mazeRoom.getContents();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return null;</b>
+&nbsp;    };
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-21 11:54</div>
+</div>
+</body>
+</html>

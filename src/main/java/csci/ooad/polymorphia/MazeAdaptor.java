@@ -88,7 +88,10 @@ public class MazeAdaptor implements IMaze {
 
     public List<String> getContents(String room){
         Room mazeRoom = maze.getRoom(room);
-        return mazeRoom.getContents();
+        if (mazeRoom != null) {
+            return mazeRoom.getContents();
+        }
+        return null;
     };
 
 }

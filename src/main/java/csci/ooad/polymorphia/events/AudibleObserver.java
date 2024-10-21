@@ -42,8 +42,4 @@ public class AudibleObserver implements IObserver {
             }
         });
     }
-
-    public void shutdown() {
-        executorService.shutdown();
-    }
 }

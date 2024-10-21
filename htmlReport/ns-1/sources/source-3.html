@@ -1,0 +1,538 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Maze</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">csci.ooad.polymorphia</a>
+</div>
+
+<h1>Coverage Summary for Class: Maze (csci.ooad.polymorphia)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Maze</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (37/37)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Maze$MazeBuilder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (16/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.3%
+  </span>
+  <span class="absValue">
+    (110/126)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (31/31)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90.2%
+  </span>
+  <span class="absValue">
+    (147/163)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package csci.ooad.polymorphia;
+&nbsp;
+&nbsp;import csci.ooad.layout.intf.IMaze;
+&nbsp;import csci.ooad.layout.intf.IMazeObserver;
+&nbsp;import csci.ooad.layout.intf.IMazeSubject;
+&nbsp;import csci.ooad.polymorphia.characters.Adventurer;
+&nbsp;import csci.ooad.polymorphia.characters.Character;
+&nbsp;import csci.ooad.polymorphia.characters.Creature;
+&nbsp;import csci.ooad.polymorphia.characters.Demon;
+&nbsp;import csci.ooad.polymorphia.factories.FoodFactory;
+&nbsp;import csci.ooad.polymorphia.factories.CharacterFactory;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;
+&nbsp;public class Maze {
+<b class="fc">&nbsp;    private final Random rand = new Random();</b>
+<b class="fc">&nbsp;    private static final Logger logger = LoggerFactory.getLogger(Maze.class);</b>
+&nbsp;
+&nbsp;    private final List&lt;Room&gt; rooms;
+&nbsp;    private final boolean distributeRandomly; // 1 = rand, 0 = simultaneous distribution
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;    private Maze(MazeBuilder builder) {</b>
+<b class="fc">&nbsp;        this.rooms = builder.rooms;</b>
+<b class="fc">&nbsp;        this.distributeRandomly = builder.distributeRandomly;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static MazeBuilder newBuilder() {
+<b class="fc">&nbsp;        return new MazeBuilder();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // TODO - implement interface methods and write tests ??
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;    public static class MazeBuilder {</b>
+&nbsp;        private List&lt;Room&gt; rooms;
+&nbsp;        private boolean distributeRandomly;
+<b class="fc">&nbsp;        private final FoodFactory foodFactory = new FoodFactory();</b>
+<b class="fc">&nbsp;        private final CharacterFactory characterFactory = new CharacterFactory();</b>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;        public MazeBuilder createNbyMGrid(int n, int m) {
+&nbsp;
+<b class="fc">&nbsp;            if(n &lt;= 0 || m &lt;= 0) {</b>
+<b class="nc">&nbsp;                throw new IllegalArgumentException(&quot;n and m must be positive&quot;);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            // Create a 2D list to store the rooms
+<b class="fc">&nbsp;            Room[][] roomGrid = new Room[n][m];</b>
+<b class="fc">&nbsp;            List&lt;Room&gt; newRooms = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;            // Create all the rooms
+<b class="fc">&nbsp;            for (int i = 0; i &lt; n; i++) {</b>
+<b class="fc">&nbsp;                for (int j = 0; j &lt; m; j++) {</b>
+<b class="fc">&nbsp;                    String roomName = &quot;Room &quot; + (i * m + j + 1); // Calculate room number</b>
+<b class="fc">&nbsp;                    Room room = new Room(roomName);</b>
+<b class="fc">&nbsp;                    roomGrid[i][j] = room;</b>
+<b class="fc">&nbsp;                    newRooms.add(room);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            // Assign neighbors
+<b class="fc">&nbsp;            for (int i = 0; i &lt; n; i++) {</b>
+<b class="fc">&nbsp;                for (int j = 0; j &lt; m; j++) {</b>
+<b class="fc">&nbsp;                    Room currentRoom = roomGrid[i][j];</b>
+&nbsp;
+&nbsp;                    // Check and assign neighbors (left, right, above, below)
+<b class="fc">&nbsp;                    if (i &gt; 0) {</b>
+<b class="fc">&nbsp;                        currentRoom.addNeighbor(roomGrid[i - 1][j]); // above</b>
+&nbsp;                    }
+<b class="fc">&nbsp;                    if (i &lt; n - 1) {</b>
+<b class="fc">&nbsp;                        currentRoom.addNeighbor(roomGrid[i + 1][j]); // below</b>
+&nbsp;                    }
+<b class="fc">&nbsp;                    if (j &gt; 0) {</b>
+<b class="fc">&nbsp;                        currentRoom.addNeighbor(roomGrid[i][j - 1]); // left</b>
+&nbsp;                    }
+<b class="fc">&nbsp;                    if (j &lt; m - 1) {</b>
+<b class="fc">&nbsp;                        currentRoom.addNeighbor(roomGrid[i][j + 1]); // right</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            // Add all the rooms to the Maze
+<b class="fc">&nbsp;            this.rooms = newRooms;</b>
+&nbsp;
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+&nbsp;        public MazeBuilder createNFullyConnectedRooms(int n){
+&nbsp;
+<b class="fc">&nbsp;            if(n &lt;= 0){</b>
+<b class="nc">&nbsp;                throw new IllegalArgumentException(&quot;n must be greater than 0&quot;);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            List&lt;Room&gt; newRooms = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;            // Create all the rooms
+<b class="fc">&nbsp;            for (int i = 0; i &lt; n; i++) {</b>
+<b class="fc">&nbsp;                String roomName = &quot;Room &quot; + (i + 1);</b>
+<b class="fc">&nbsp;                Room room = new Room(roomName);</b>
+<b class="fc">&nbsp;                newRooms.add(room);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            // Assign neighbors
+<b class="fc">&nbsp;            for(Room room : newRooms){</b>
+<b class="fc">&nbsp;                for(Room otherRoom : newRooms){</b>
+<b class="fc">&nbsp;                    if(!otherRoom.equals(room)){</b>
+<b class="fc">&nbsp;                        room.addNeighbor(otherRoom);</b>
+&nbsp;                    }
+<b class="fc">&nbsp;                }</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;
+&nbsp;            // Add all the rooms to the Maze
+<b class="fc">&nbsp;            this.rooms = newRooms;</b>
+&nbsp;
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public MazeBuilder distributeRandomly(){
+<b class="fc">&nbsp;            this.distributeRandomly = true;</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public MazeBuilder distributeSequentially() {
+<b class="fc">&nbsp;            this.distributeRandomly = false;</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public MazeBuilder addRoom(Room roomToAdd) {
+<b class="fc">&nbsp;            if (this.rooms == null) this.rooms = new ArrayList&lt;&gt;();</b>
+&nbsp;            // If there&#39;s already a room in the list, set the last room as its neighbor
+<b class="fc">&nbsp;            boolean noRooms = this.rooms.isEmpty();</b>
+<b class="fc">&nbsp;            if(noRooms){</b>
+<b class="fc">&nbsp;                this.rooms.add(roomToAdd);</b>
+&nbsp;            }
+&nbsp;            else {
+<b class="fc">&nbsp;                Room lastRoom = this.rooms.getLast();</b>
+<b class="fc">&nbsp;                roomToAdd.addNeighbor(lastRoom);</b>
+<b class="fc">&nbsp;                lastRoom.addNeighbor(roomToAdd);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+&nbsp;        public MazeBuilder placeObjectIntoRoom(Object object, Room room){
+<b class="fc">&nbsp;            if(this.rooms.contains(room)){</b>
+<b class="fc">&nbsp;                if(object instanceof Character){</b>
+<b class="fc">&nbsp;                    room.add((Character) object);</b>
+<b class="fc">&nbsp;                    logger.info(&quot;placeObjectIntoRoom: Character placed into room&quot;);</b>
+<b class="fc">&nbsp;                } else if (object instanceof Food){</b>
+<b class="fc">&nbsp;                    room.add((Food) object);</b>
+<b class="fc">&nbsp;                    logger.info(&quot;placeObjectIntoRoom: Food placed into room&quot;);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    throw new IllegalArgumentException(&quot;object must be a Character or Food&quot;);</b>
+&nbsp;                }
+&nbsp;            }else{
+<b class="nc">&nbsp;                throw new IllegalArgumentException(&quot;Maze must contain room to place object&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        private void distributeObjectsRandomly(List&lt;Object&gt; objects){
+&nbsp;
+&nbsp;            // Get random index
+<b class="fc">&nbsp;            Random random = new Random();</b>
+<b class="fc">&nbsp;            int numRooms = this.rooms.size();</b>
+&nbsp;
+&nbsp;            // For each object, generate a rand index and add obj to it
+<b class="fc">&nbsp;            for(Object object : objects){</b>
+&nbsp;
+<b class="fc">&nbsp;                int randomIndex = random.nextInt(numRooms);</b>
+&nbsp;
+<b class="fc">&nbsp;                if (object instanceof Character) {</b>
+<b class="fc">&nbsp;                    this.rooms.get(randomIndex).add((Character)object);</b>
+<b class="nc">&nbsp;                } else if (object instanceof Food) {</b>
+<b class="nc">&nbsp;                    this.rooms.get(randomIndex).add((Food)object);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    throw new IllegalArgumentException(&quot;object must be a Character or Food&quot;);</b>
+&nbsp;                }
+<b class="fc">&nbsp;            }</b>
+&nbsp;
+&nbsp;        }
+&nbsp;
+&nbsp;        private void distributeObjectsSequentially(List&lt;Object&gt; objects){
+&nbsp;
+&nbsp;            // Room index
+<b class="fc">&nbsp;            int roomIndex = 0;</b>
+&nbsp;
+&nbsp;            // For each object, add to room and add one to room index
+<b class="fc">&nbsp;            for(Object object : objects){</b>
+&nbsp;
+<b class="fc">&nbsp;                if (object instanceof Character) {</b>
+<b class="fc">&nbsp;                    this.rooms.get(roomIndex).add((Character)object);</b>
+<b class="fc">&nbsp;                } else if (object instanceof Food) {</b>
+<b class="fc">&nbsp;                    this.rooms.get(roomIndex).add((Food)object);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    throw new IllegalArgumentException(&quot;object must be a Character or Food&quot;);</b>
+&nbsp;                }
+&nbsp;
+<b class="fc">&nbsp;                roomIndex = (roomIndex + 1) % this.rooms.size();</b>
+&nbsp;
+<b class="fc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public MazeBuilder createAndAddFoodItems(int numFoods){
+&nbsp;
+<b class="fc">&nbsp;            List&lt;Food&gt; foodsToAdd = foodFactory.createListOfFood(numFoods);</b>
+<b class="fc">&nbsp;            List&lt;Object&gt; foodsAsObjects = new ArrayList&lt;&gt;(foodsToAdd);</b>
+&nbsp;
+<b class="fc">&nbsp;            if(distributeRandomly){</b>
+&nbsp;
+&nbsp;                // Randomly distribute items
+<b class="nc">&nbsp;                distributeObjectsRandomly(foodsAsObjects);</b>
+&nbsp;
+&nbsp;            } else {
+&nbsp;                // Sequentially distribute items
+<b class="fc">&nbsp;                distributeObjectsSequentially(foodsAsObjects);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /*
+&nbsp;        * @param numAdventurers is the total num adventurers to be distributed to Maze rooms (type rand. determined by CharacterFactory)
+&nbsp;        * */
+&nbsp;        public MazeBuilder createAndAddAdventurers(int numAdventurers) {
+&nbsp;            // Ensure the characterFactory is not null
+<b class="fc">&nbsp;            if (characterFactory == null) {</b>
+<b class="nc">&nbsp;                throw new IllegalStateException(&quot;CharacterFactory must be initialized before creating adventurers.&quot;);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            // Call the non-static method using the characterFactory instance
+<b class="fc">&nbsp;            ArrayList&lt;Character&gt; adventurersToAdd = characterFactory.createAdventurers(numAdventurers);</b>
+<b class="fc">&nbsp;            List&lt;Object&gt; adventurersAsObjects = new ArrayList&lt;&gt;(adventurersToAdd);</b>
+&nbsp;
+<b class="fc">&nbsp;            if (distributeRandomly) {</b>
+&nbsp;                // Randomly distribute items
+<b class="fc">&nbsp;                distributeObjectsRandomly(adventurersAsObjects);</b>
+&nbsp;            } else {
+&nbsp;                // Sequentially distribute items
+<b class="fc">&nbsp;                distributeObjectsSequentially(adventurersAsObjects);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /*
+&nbsp;         * @param adventure is an instance of an adventurer that is then passed into a list.
+&nbsp;         * */
+&nbsp;        public MazeBuilder createAndAddAdventurers(Adventurer adventurer) {
+&nbsp;            // Ensure the characterFactory is not null
+<b class="fc">&nbsp;            if (characterFactory == null) {</b>
+<b class="nc">&nbsp;                throw new IllegalStateException(&quot;CharacterFactory must be initialized before creating adventurers.&quot;);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            // Call the non-static method using the characterFactory instance
+<b class="fc">&nbsp;            List&lt;Object&gt; adventurersAsObjects = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;            adventurersAsObjects.add(adventurer);</b>
+&nbsp;
+<b class="fc">&nbsp;            if (distributeRandomly) {</b>
+&nbsp;                // Randomly distribute items
+<b class="nc">&nbsp;                distributeObjectsRandomly(adventurersAsObjects);</b>
+&nbsp;            } else {
+&nbsp;                // Sequentially distribute items
+<b class="fc">&nbsp;                distributeObjectsSequentially(adventurersAsObjects);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public MazeBuilder createAndAddAdventurers(int numKnights, int numCowards, int numGluttons, int numRegular) {
+&nbsp;            // Ensure the characterFactory is not null
+<b class="fc">&nbsp;            if (characterFactory == null) {</b>
+<b class="nc">&nbsp;                throw new IllegalStateException(&quot;CharacterFactory must be initialized before creating adventurers.&quot;);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            // Call the non-static method using the characterFactory instance
+<b class="fc">&nbsp;            ArrayList&lt;Character&gt; adventurersToAdd = characterFactory.createAdventurers(numKnights, numCowards, numGluttons, numRegular);</b>
+<b class="fc">&nbsp;            List&lt;Object&gt; adventurersAsObjects = new ArrayList&lt;&gt;(adventurersToAdd);</b>
+&nbsp;
+<b class="fc">&nbsp;            if (distributeRandomly) {</b>
+&nbsp;                // Randomly distribute items
+<b class="nc">&nbsp;                distributeObjectsRandomly(adventurersAsObjects);</b>
+&nbsp;            } else {
+&nbsp;                // Sequentially distribute items
+<b class="fc">&nbsp;                distributeObjectsSequentially(adventurersAsObjects);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public MazeBuilder createAndAddCreatures(int numCreatures, boolean isDemon){
+&nbsp;
+<b class="fc">&nbsp;            ArrayList&lt;Character&gt; creaturesToAdd = characterFactory.createCreatures(numCreatures,isDemon);</b>
+<b class="fc">&nbsp;            List&lt;Object&gt; creaturesAsObjects = new ArrayList&lt;&gt;(creaturesToAdd);</b>
+&nbsp;
+<b class="fc">&nbsp;            if(distributeRandomly){</b>
+&nbsp;
+&nbsp;                // Randomly distribute items
+<b class="nc">&nbsp;                distributeObjectsRandomly(creaturesAsObjects);</b>
+&nbsp;
+&nbsp;            } else {
+&nbsp;                // Sequentially distribute items
+<b class="fc">&nbsp;                distributeObjectsSequentially(creaturesAsObjects);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public MazeBuilder createAndAddCreatures(Creature creature, boolean includeDemon){
+&nbsp;
+<b class="fc">&nbsp;            ArrayList&lt;Object&gt; creaturesToAdd = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;            creaturesToAdd.add(creature);</b>
+<b class="fc">&nbsp;            if (includeDemon) creaturesToAdd.add(new Demon(&quot;Demon&quot;));</b>
+&nbsp;
+<b class="fc">&nbsp;            if(distributeRandomly){</b>
+&nbsp;                // Randomly distribute items
+<b class="nc">&nbsp;                distributeObjectsRandomly(creaturesToAdd);</b>
+&nbsp;            } else {
+&nbsp;                // Sequentially distribute items
+<b class="fc">&nbsp;                distributeObjectsSequentially(creaturesToAdd);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Maze build(){
+<b class="fc">&nbsp;            return new Maze(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public int size() {
+<b class="fc">&nbsp;        return rooms.size();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String toString() {
+<b class="fc">&nbsp;        return String.join(&quot;\n\n&quot;, rooms.stream().map(Object::toString).toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Boolean hasLivingCreatures() {
+<b class="fc">&nbsp;        return rooms.stream().anyMatch(Room::hasLivingCreatures);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Boolean hasLivingAdventurers() {
+<b class="fc">&nbsp;        return rooms.stream().anyMatch(Room::hasLivingAdventurers);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Room getRandomRoom() {
+<b class="fc">&nbsp;        return rooms.get(rand.nextInt(rooms.size()));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Adventurer&gt; getLivingAdventurers() {
+<b class="fc">&nbsp;        List&lt;Adventurer&gt; adventurers = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (Room room : rooms) {</b>
+<b class="fc">&nbsp;            adventurers.addAll(room.getLivingAdventurers());</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return adventurers;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Creature&gt; getLivingCreatures() {
+<b class="fc">&nbsp;        List&lt;Creature&gt; creatures = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (Room room : rooms) {</b>
+<b class="fc">&nbsp;            creatures.addAll(room.getLivingCreatures());</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return creatures;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Character&gt; getLivingCharacters() {
+<b class="fc">&nbsp;        List&lt;Character&gt; characters = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (Room room : rooms) {</b>
+<b class="fc">&nbsp;            characters.addAll(room.getLivingCharacters());</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return characters;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void addToRandomRoom(Character character) {
+<b class="fc">&nbsp;        getRandomRoom().add(character);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void addToRandomRoom(Food foodItem) {
+<b class="fc">&nbsp;        getRandomRoom().add(foodItem);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Room&gt; getRooms() {
+<b class="fc">&nbsp;        return rooms;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Room getRoom(String roomName){
+<b class="fc">&nbsp;        Room targetRoom = null;</b>
+<b class="fc">&nbsp;        for (Room room : rooms) {</b>
+<b class="fc">&nbsp;            System.out.println(room.getName());</b>
+<b class="fc">&nbsp;            if (room.getName().equals(roomName)) {</b>
+<b class="fc">&nbsp;                targetRoom = room;</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return targetRoom;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-21 11:54</div>
+</div>
+</body>
+</html>

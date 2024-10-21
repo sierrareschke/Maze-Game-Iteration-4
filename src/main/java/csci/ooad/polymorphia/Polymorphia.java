@@ -123,18 +123,6 @@ public class Polymorphia implements IMazeSubject {
         eventBus.postMessage(EventType.GameOver,"Game has ended");
     }
 
-    String getAdventurerNames() {
-        return String.join("\n ", getLivingCharacters().stream().map(Object::toString).toList());
-    }
-
-    String getCreatureNames() {
-        return String.join("\n ", getAliveCreatures().stream().map(Object::toString).toList());
-    }
-
-    public List<Creature> getAliveCreatures() {
-        return maze.getLivingCreatures();
-    }
-
     public Character getWinner() {
         if (!isOver() || !hasLivingCharacters()) {
             // No one has won yet or no one won -- all died

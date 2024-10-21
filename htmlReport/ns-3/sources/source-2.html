@@ -1,0 +1,156 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > EventBus</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">csci.ooad.polymorphia.events</a>
+</div>
+
+<h1>Coverage Summary for Class: EventBus (csci.ooad.polymorphia.events)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EventBus</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (17/17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package csci.ooad.polymorphia.events;
+&nbsp;
+&nbsp;import csci.ooad.polymorphia.events.EventType;
+&nbsp;import csci.ooad.polymorphia.events.IObserver;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;public class EventBus implements IObservable {
+&nbsp;    private static EventBus instance;
+<b class="fc">&nbsp;    private final Map&lt;EventType, Set&lt;IObserver&gt;&gt; eventsAndObservers = new HashMap&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;    private EventBus() {}</b>
+&nbsp;
+&nbsp;    public static EventBus getInstance() {
+<b class="fc">&nbsp;        if (instance == null) {</b>
+<b class="fc">&nbsp;            instance = new EventBus();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return instance;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Attach method: properly adds observers to specific event types
+&nbsp;    public void attach(IObserver observer, EventType eventType) {
+&nbsp;        // Initialize the set if the eventType doesn&#39;t have any observers yet
+<b class="fc">&nbsp;        eventsAndObservers.computeIfAbsent(eventType, k -&gt; new HashSet&lt;&gt;());</b>
+&nbsp;
+&nbsp;        // Add the observer to the set, ensuring no duplicates
+<b class="fc">&nbsp;        eventsAndObservers.get(eventType).add(observer);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Post message to observers for the specific event type and all-event observers
+&nbsp;    public void postMessage(EventType eventType, String eventDescription) {
+&nbsp;        // Retrieve the list of observers for the specific event type
+<b class="fc">&nbsp;        Set&lt;IObserver&gt; subscribersToEvent = eventsAndObservers.get(eventType);</b>
+&nbsp;        // Retrieve the list of observers for all events
+<b class="fc">&nbsp;        Set&lt;IObserver&gt; subscribersToAllEvents = eventsAndObservers.get(EventType.All);</b>
+&nbsp;
+&nbsp;        // If no observers for the specific event type, initialize the set
+<b class="fc">&nbsp;        if (subscribersToEvent == null) {</b>
+<b class="fc">&nbsp;            subscribersToEvent = new HashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;            eventsAndObservers.put(eventType, subscribersToEvent);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // If there are observers for all events, merge them into the event-specific set
+<b class="fc">&nbsp;        if (subscribersToAllEvents != null) {</b>
+<b class="fc">&nbsp;            subscribersToEvent.addAll(subscribersToAllEvents);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Notify all observers for this event type
+<b class="fc">&nbsp;        for (IObserver observer : subscribersToEvent) {</b>
+<b class="fc">&nbsp;            observer.update(eventDescription);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-21 11:54</div>
+</div>
+</body>
+</html>

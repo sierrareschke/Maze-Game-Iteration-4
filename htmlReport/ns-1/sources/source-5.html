@@ -1,0 +1,260 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Polymorphia</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">csci.ooad.polymorphia</a>
+</div>
+
+<h1>Coverage Summary for Class: Polymorphia (csci.ooad.polymorphia)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Polymorphia</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94.5%
+  </span>
+  <span class="absValue">
+    (52/55)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package csci.ooad.polymorphia;
+&nbsp;
+&nbsp;import csci.ooad.layout.intf.IMaze;
+&nbsp;import csci.ooad.layout.intf.IMazeObserver;
+&nbsp;import csci.ooad.layout.intf.IMazeSubject;
+&nbsp;import csci.ooad.layout.intf.MazeObserver;
+&nbsp;import csci.ooad.polymorphia.characters.Character;
+&nbsp;import csci.ooad.polymorphia.characters.Creature;
+&nbsp;import csci.ooad.polymorphia.events.*;
+&nbsp;import jdk.jfr.Event;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Random;
+&nbsp;import java.util.concurrent.Future;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;import static csci.ooad.polymorphia.events.EventType.*;
+&nbsp;
+&nbsp;
+&nbsp;/*
+&nbsp; *  TODO:    Register observer before you start the game
+&nbsp; *  TODO:    Connect observer up to the Event Bus, inside of this class?
+&nbsp; *  TODO:    Implement the IMazeSubject on this object and attach the viewer
+&nbsp; *  TODO:    Call the notifyObservers() method when relevant information is posted to the Event Bus.
+&nbsp; *           At a minimum, you should call this method at the end of each turn (this is also probably sufficient)
+&nbsp; *   TODO:   Implement the getMaze() method, which returns an object that implements the IMaze interface
+&nbsp;
+&nbsp; * */
+&nbsp;
+&nbsp;
+&nbsp;public class Polymorphia implements IMazeSubject {
+<b class="fc">&nbsp;    private static final Logger logger = LoggerFactory.getLogger(Polymorphia.class);</b>
+&nbsp;    IObserver audibleObserver;
+&nbsp;    EventBus eventBus;
+&nbsp;
+&nbsp;    Maze maze;
+<b class="fc">&nbsp;    Integer turnCount = 1;</b>
+<b class="fc">&nbsp;    final Random rand = new Random();</b>
+<b class="fc">&nbsp;    Future&lt;Void&gt; lastSpeechTask = null;</b>
+&nbsp;
+<b class="fc">&nbsp;    public Polymorphia(Maze maze) {</b>
+&nbsp;
+<b class="fc">&nbsp;        eventBus = EventBus.getInstance();</b>
+<b class="fc">&nbsp;        int delayInSeconds = 100;</b>
+<b class="fc">&nbsp;        audibleObserver = new AudibleObserver(delayInSeconds);</b>
+<b class="fc">&nbsp;        eventBus.attach(audibleObserver, EventType.All);</b>
+&nbsp;
+<b class="fc">&nbsp;        this.maze = maze;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String toString() {
+<b class="fc">&nbsp;        return &quot;Polymorphia MAZE: turn &quot; + turnCount + &quot;\n&quot; + maze.toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Game is over when all creatures are killed
+&nbsp;    // or all adventurers are killed
+&nbsp;    public Boolean isOver() {
+<b class="fc">&nbsp;        return !hasLivingAdventurers() || !hasLivingCreatures();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Boolean hasLivingCreatures() {
+<b class="fc">&nbsp;        return maze.hasLivingCreatures();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Boolean hasLivingAdventurers() {
+<b class="fc">&nbsp;        return maze.hasLivingAdventurers();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void playTurn() {
+<b class="fc">&nbsp;        if (turnCount == 1) {</b>
+<b class="fc">&nbsp;            logger.info(&quot;Starting play...&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Process all the characters in random order
+<b class="fc">&nbsp;        List&lt;Character&gt; characters = getLivingCharacters();</b>
+<b class="fc">&nbsp;        while (!characters.isEmpty()) {</b>
+<b class="fc">&nbsp;            int index = rand.nextInt(characters.size());</b>
+<b class="fc">&nbsp;            characters.get(index).doAction();</b>
+<b class="fc">&nbsp;            characters.remove(index);</b>
+<b class="fc">&nbsp;            characters = characters.stream()</b>
+<b class="fc">&nbsp;                    .filter(Character::isAlive)</b>
+<b class="fc">&nbsp;                    .collect(Collectors.toList());</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Character&gt; getLivingCharacters() {
+<b class="fc">&nbsp;        return maze.getLivingCharacters();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void play() {
+<b class="fc">&nbsp;        eventBus.postMessage(EventType.GameStart,&quot;Game has begun&quot;);</b>
+<b class="fc">&nbsp;        while (!isOver()) {</b>
+<b class="fc">&nbsp;            logger.info(this.toString());</b>
+&nbsp;
+&nbsp;            // Wait for the last speech task to finish before starting the next turn
+<b class="fc">&nbsp;            if (lastSpeechTask != null) {</b>
+&nbsp;                try {
+<b class="fc">&nbsp;                    lastSpeechTask.get();  // Wait until the previous speech task is done</b>
+<b class="nc">&nbsp;                } catch (Exception e) {</b>
+<b class="nc">&nbsp;                    e.printStackTrace();</b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;            }
+&nbsp;            // Notify start of turn
+<b class="fc">&nbsp;            String startTurn = &quot;Turn &quot; + turnCount;</b>
+<b class="fc">&nbsp;            notifyObservers(startTurn);</b>
+&nbsp;
+<b class="fc">&nbsp;            playTurn();</b>
+<b class="fc">&nbsp;            String turnMessage = &quot;Turn &quot; + turnCount + &quot; ended&quot;;</b>
+<b class="fc">&nbsp;            notifyObservers(turnMessage);</b>
+&nbsp;
+&nbsp;            // Post a new message to the event bus and save the Future object
+<b class="fc">&nbsp;            lastSpeechTask = audibleObserver.update(turnMessage);</b>
+<b class="fc">&nbsp;            eventBus.postMessage(EventType.TurnEnded, turnMessage);</b>
+&nbsp;
+&nbsp;            // increment the round counter
+<b class="fc">&nbsp;            turnCount += 1;</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        logger.info(&quot;The game ended after {} turns.&quot;, turnCount);</b>
+<b class="fc">&nbsp;        eventBus.postMessage(EventType.GameOver,&quot;Game has ended&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Character getWinner() {
+<b class="fc">&nbsp;        if (!isOver() || !hasLivingCharacters()) {</b>
+&nbsp;            // No one has won yet or no one won -- all died
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return getLivingCharacters().getFirst();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private boolean hasLivingCharacters() {
+<b class="fc">&nbsp;        return !getLivingCharacters().isEmpty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    // IMazeSubject interface methods
+&nbsp;    @Override
+&nbsp;    public void attach(IMazeObserver observer) {
+<b class="fc">&nbsp;        observers.add(observer);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void notifyObservers(String statusMessage) {
+<b class="fc">&nbsp;        for (IMazeObserver observer : observers) {</b>
+<b class="fc">&nbsp;            observer.update(getMaze(), statusMessage);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public IMaze getMaze() {
+<b class="fc">&nbsp;        MazeAdaptor mazeAdaptor = new MazeAdaptor(maze);</b>
+<b class="fc">&nbsp;        return mazeAdaptor;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-10-21 11:54</div>
+</div>
+</body>
+</html>
