@@ -15,7 +15,6 @@ class DieTest {
         for (int i = 0; i < 100; i++) {
             values.merge(Die.rollSixSided(), 1, Integer::sum);
         }
-        System.out.println(values);
         assertFalse(values.containsKey(0));
         assertFalse(values.containsKey(7));
         assertEquals(6, values.keySet().size());

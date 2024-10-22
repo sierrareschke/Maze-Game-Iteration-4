@@ -6,6 +6,8 @@ import csci.ooad.polymorphia.characters.Adventurer;
 import csci.ooad.polymorphia.characters.Creature;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +22,7 @@ public class PolymorphiaTest {
             "Ice Cream", "Coffee", "Coke", "Pizza", "Pasta");
     private IMazeObserver mazeObserver;
     private final int SECONDS_TO_PAUSE_BETWEEN_TURNS = 3;
+    private static final Logger logger = LoggerFactory.getLogger(PolymorphiaTest.class);
 
     @BeforeEach
     void setUp() {
@@ -124,11 +127,11 @@ public class PolymorphiaTest {
             }
         }
 
-        System.out.println("Adventurers won " + adventurerWins + " and creatures won " + creatureWins);
-        System.out.println("There were " + numTies + " games with no winners");
+        logger.info("Adventurers won " + adventurerWins + " and creatures won " + creatureWins);
+        logger.info("There were " + numTies + " games with no winners");
 
         double adventureWinRatio = (double) adventurerWins / (double) TOTAL_GAMES;
-        System.out.println("Adventures won " + (adventureWinRatio * 100) + "% of the games.");
+        logger.info("Adventures won " + (adventureWinRatio * 100) + "% of the games.");
 
         // Check to see that adventurers win at least 1% of the games
         assertTrue(adventureWinRatio > 0.01);

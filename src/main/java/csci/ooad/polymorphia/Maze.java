@@ -398,7 +398,6 @@ public class Maze {
     public Room getRoom(String roomName){
         Room targetRoom = null;
         for (Room room : rooms) {
-            System.out.println(room.getName());
             if (room.getName().equals(roomName)) {
                 targetRoom = room;
                 break;

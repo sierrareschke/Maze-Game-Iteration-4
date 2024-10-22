@@ -20,7 +20,6 @@ class FoodTest {
     @Test
     void testToString() {
         Food steak = new Food("Steak", 2);
-        System.out.println(steak.toString());
         assertTrue(steak.toString().contains("Steak"));
         assertTrue(steak.toString().contains("2"));
     }
