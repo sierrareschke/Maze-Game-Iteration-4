@@ -7,6 +7,7 @@
 ### Introduction
     Team Members: Grace Ohlsen, Nolan Brady, Sierra Reschke
     Java Version: 21
+
 ### Comments/Assumptions:
 
     // Coward: order of action is fight Demon, flee from Creature, eat, move (if no creatures/demons present)
@@ -18,11 +19,13 @@
 
     // Glutton will continue eating food while food is present in the room
 
+    // Paused the game play each turrn to wait for the audio to catch up
+
 ### UML Diagram
 ![](./uml_diagram.png)
 
-### Game play files
-The game files can be found in the main directory. They are named `./polymorphia_game_play_1.log`, `./polymorphia_game_play_2.log` and `./polymorphia_game_play_3.log`.
+### Game play video
+![game_play_video.mp4](game_play_video.mp4)
 
 ### Test Coverage
 ![](./hw_5_test_coverage.png)
