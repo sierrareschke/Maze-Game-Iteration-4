@@ -21,6 +21,9 @@
 
     // Paused the game play each turrn to wait for the audio to catch up
 
+## Interaction Diagram
+![InteractionDiagram.png](InteractionDiagram.png)
+
 ### UML Diagram
 ![](./uml_diagram.png)
 
