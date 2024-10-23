@@ -25,6 +25,7 @@
 ![](./uml_diagram.png)
 
 ### Game play video
+In case this doesn't work, the game play video can be found at `./game_play.mpg`
 ![game_play_video.mp4](game_play_video.mp4)
 
 ### Test Coverage
