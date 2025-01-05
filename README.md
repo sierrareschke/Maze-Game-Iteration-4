@@ -1,9 +1,7 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/5PzdTUsN)
-# OOAD Fall 2024 Homework 5
+TODO: copy paste word doc of homework 5 instructions
 
-    NOTE: Expect some minor edits/updates
+## Adding the Observer, Adaptor, and Singleton Patterns to Polymorphia
 
-## Project Report
 ### Introduction
     Team Members: Grace Ohlsen, Nolan Brady, Sierra Reschke
     Java Version: 21
@@ -34,39 +32,6 @@ In case this doesn't work, the game play video can be found at `./game_play.mpg`
 ### Test Coverage
 ![](./hw_5_test_coverage.png)
 
-
-You will submit this assignment via a link to your GIT repository. If you are re-using a repository from
-a previous homework, create a branch called "Homework_4" and commit all changes
-for this assignment into that branch. And turn in a link to this branch.
-
-## Grading Rubric:
-
-### Deductions
-* Meaningful names for everything: variables, methods, classes, interfaces, etc. (1% off for each bad name, up to 10% total)
-* No "magic" numbers or strings (1% off for each one, up to 10%)
-* Unit tests: 100% method coverage  (1% off for each 5% below 100%)
-* No System.out.println() calls anywhere in your main code – replace with logging (see below) or eliminate outright. 1% off for each System.out.println statement in src/main/java code.
-* 1% deduction for each missing required addition to the README.md (game outputs, screenshots, diagrams)
-
-### Method Construction Possible Deductions (max is listed under Required Capabilities)
-
-Methods should be:
-* "short" -- with very few exceptions all methods should fit on a screen using a readable font.
-* well named (duh).
-* properly denoted as instance methods vs. static methods (static methods don't reference the _this_ pointer).
-* limited complexity (level of indentation due to control structures).
-* not have comments that could be turned into just as readable code.
-
-All of this can be achieved through functional decomposition of more complicated methods (see lecture on October 2nd).
-
-### Required Capabilities
-
-* Add a screenshot of your code coverage to your README.md (5 points)
-* Add the output from three games into your README.md (5 points)
-* Add a UML Diagram of your classes (don’t include Builder or Factories) into your README.md   (5 points)
-* Game extensions (5 points for each new subclass - 20 total points)
-* Use Builder pattern for creating the maze (14 points for required capabilities and 6 points for method construction - 20 total points)
-* Use the Factory pattern in your Maze.Builder class (12 points creating required concrete classes and 3 points for method construction - 15 total points)
 
 ## Extending the Game
 We’re going to extend the game in this assignment, making the game a bit more interesting and creating a situation where we’d want to use the Factory pattern.
